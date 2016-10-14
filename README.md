@@ -6,7 +6,7 @@ With instaFeed.js you can develop individual instagram datablocks without starti
 
 ## Getting Started
 
-The `instaFeed` library can be download to your local repository with these commands:
+The `instaFeed` library can be download to your local repository with bower command
 
 ```shell
 bower install instaFeed
