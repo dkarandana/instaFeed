@@ -19,7 +19,7 @@ $.fn.instaFeed = function( options ) {
         if ( container.data('instafeed-log') === false || 
            ( options && options.log === false ) ||
            ( opts && opts.log === false) ) {
-         //  log = $.noop;
+           log = $.noop;
         }
 
         log('--initialized--');
