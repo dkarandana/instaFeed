@@ -9,7 +9,7 @@ $.fn.instaFeed = function( options ) {
         $(function() {
             $( o.s, o.c ).instaFeed( options );
         });
-        return this;
+        return this; 
     }
 	return this.each(function() {
 		var data, opts, shortName, val;
@@ -27,7 +27,7 @@ $.fn.instaFeed = function( options ) {
         data = container.data();
 
         for (var p in data) {
-            // allow props to be accessed sans 'cycle' prefix and log the overrides
+            // allow props to be accessed 'instafeed' prefix and log the overrides
             if (data.hasOwnProperty(p) && /^instafeed[A-Z]+/.test(p) ) {
                 val = data[p];
                 shortName = p.match(/^instafeed(.*)/)[1].replace(/^[A-Z]/, lowerCase);
@@ -89,12 +89,10 @@ $.fn.instaFeed.API = {
     	var opts = this.opts();
     	opts.API.log('requesting images from', opts.profile );
     	$.ajax({
-			url: opts.apiURL + opts.endpoint,
-			dataType: 'jsonp',
+            url:'templates/main/config.instaFeed.php',
+			dataType: 'json',
 			type: 'GET',
-			data: {access_token: opts.token, count: opts.maxphotos},
-			success: function(data){
-
+			success: function( jsonFeed ){
 				opts.API.log(opts);
 				var $element = container,
 					num = 1,
@@ -104,25 +102,23 @@ $.fn.instaFeed.API = {
                     wrapperTmpString;
 
 				if( $element.length > 0 ){
-					for( var x in data.data ){ 
-                        if( typeof data.data[x] === "object"){
+					for( var x in jsonFeed.data ){ 
+                        if( typeof jsonFeed.data[x] === "object"){
 
                             templateString =  opts.API.template( opts.template , {
                                 parentCls:opts.parentclass,
                                 num:num++,
-                                lowResolutionURL:data.data[x].images.low_resolution.url
+                                lowResolutionURL:jsonFeed.data[x].images.low_resolution.url
                             }, opts );
 
                             allowWrap = opts.centerwrap === true && opts.maxphotos %2!==0 && Math.round( opts.maxphotos /2);
 
                             if( allowWrap === ( num - 1) ){
-
 								$element.append( $( templateString ).addClass('center-item')[0] );
 
 							}else{
 								$element.append( templateString );
 							}
-                            
                         }
 					}
 					
@@ -157,7 +153,6 @@ $.fn.instaFeed.defaults = {
 	apiURL 			: 'https://api.instagram.com/v1',
 	autoSelector	: '.instafeed[data-instafeed-profile]',
 	endPoint		: '/users/self/media/recent',
- 	maxPhotos		: 20,
  	wrap			: 0,
  	wrapperTemplate : '<div class="wrap wrap_{{wrapcount}}"></div>',
     sync			: true,
